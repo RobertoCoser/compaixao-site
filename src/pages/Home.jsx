@@ -99,13 +99,21 @@ export default function Home() {
       </section>
 
       {/* IMPACTO */}
-      <section className="py-20 lg:py-28 bg-primary-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionTitle title="Nosso Impacto" subtitle="Resultados" light />
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      <section className="bg-primary-900 py-16 sm:py-20 lg:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionTitle
+            title="Nosso Impacto"
+            subtitle="Resultados"
+            light
+          />
+
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
             {impacto.map((item) => (
-              <ScrollReveal key={item.id} delay={item.id * 100}>
-                <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
+              <ScrollReveal
+                key={item.id}
+                delay={item.id * 100}
+              >
+                <div className="h-full overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-sm transition duration-300 hover:bg-white/[0.09]">
                   <ImpactCounter
                     value={item.value}
                     suffix={item.suffix}
