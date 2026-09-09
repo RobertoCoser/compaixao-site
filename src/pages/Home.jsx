@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Heart, Sprout, Baby, Users, Accessibility, Recycle, Instagram, Calendar } from 'lucide-react'
+import { ArrowRight, Heart, Sprout, Baby, Users, Accessibility, Recycle, Calendar } from 'lucide-react'
 import SectionTitle from '../components/SectionTitle'
 import ImpactCounter from '../components/ImpactCounter'
 import ScrollReveal from '../components/ScrollReveal'
@@ -24,7 +24,7 @@ export default function Home() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-earth-900/90 to-earth-900/40" />
         </div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <ScrollReveal>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-600/20 text-primary-300 text-sm font-medium mb-6 border border-primary-500/30">
@@ -74,7 +74,7 @@ export default function Home() {
                 <div className="absolute -top-6 -left-6 w-24 h-24 bg-warm-100 rounded-2xl -z-10 hidden lg:block" />
               </div>
             </ScrollReveal>
-            
+
             <ScrollReveal delay={200}>
               <span className="text-primary-600 font-semibold text-sm uppercase tracking-wider">Sobre nós</span>
               <h2 className="text-3xl lg:text-4xl font-bold text-earth-900 mt-2 mb-6">
@@ -217,7 +217,7 @@ export default function Home() {
               Ver todas <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {latestNews.map((news, index) => (
               <ScrollReveal key={news.id} delay={index * 100}>
@@ -263,7 +263,9 @@ export default function Home() {
       <section className="py-16 bg-white border-t border-earth-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <ScrollReveal>
-            <Instagram className="w-10 h-10 text-pink-600 mx-auto mb-4" />
+            <div className="w-10 h-10 mx-auto mb-4 flex items-center justify-center text-pink-600 font-bold">
+              IG
+            </div>
             <h2 className="text-2xl lg:text-3xl font-bold text-earth-900 mb-3">Acompanhe também pelo Instagram</h2>
             <p className="text-earth-600 mb-6">
               Fique por dentro das ações em tempo real e faça parte da nossa comunidade digital.
@@ -274,7 +276,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:opacity-90 transition-opacity shadow-lg"
             >
-              <Instagram className="w-5 h-5" />
+              <span className="font-semibold">IG</span>
               Seguir no Instagram
             </a>
           </ScrollReveal>

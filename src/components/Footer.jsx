@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Heart, Instagram, MapPin, Mail, ExternalLink } from 'lucide-react'
+import { Heart, MapPin, Mail, ExternalLink } from 'lucide-react'
 
 const footerLinks = [
   { to: '/', label: 'Início' },
@@ -35,7 +35,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm text-primary-400 hover:text-primary-300 transition-colors"
             >
-              <Instagram className="w-4 h-4" />
+              <span>Instagram</span>
               @projetocompaixaoifrs
             </a>
           </div>
