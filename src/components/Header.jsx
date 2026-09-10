@@ -1,110 +1,123 @@
-import { useEffect, useState } from 'react'
-import { Heart, Menu, X } from 'lucide-react'
-import { Link, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import { Menu, X } from 'lucide-react'
 import MobileMenu from './MobileMenu'
 
 const navLinks = [
-  { to: '/', label: 'Início' },
-  { to: '/sobre', label: 'Sobre' },
-  { to: '/acoes', label: 'Ações' },
-  { to: '/noticias', label: 'Notícias' },
-  { to: '/galeria', label: 'Galeria' },
-  { to: '/como-participar', label: 'Como Participar' },
-  { to: '/contato', label: 'Contato' },
+  {
+    label: 'Início',
+    to: '/',
+  },
+  {
+    label: 'Sobre',
+    to: '/sobre',
+  },
+  {
+    label: 'Ações',
+    to: '/acoes',
+  },
+  {
+    label: 'Notícias',
+    to: '/noticias',
+  },
+  {
+    label: 'Galeria',
+    to: '/galeria',
+  },
 ]
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const location = useLocation()
 
-  useEffect(() => {
+  const toggleMobileMenu = () => {
+    setMobileOpen((current) => !current)
+  }
+
+  const closeMobileMenu = () => {
     setMobileOpen(false)
-  }, [location.pathname])
+  }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-earth-200 bg-white/90 shadow-sm backdrop-blur-md">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between lg:h-20">
-          <Link
-            to="/"
-            className="group flex min-w-0 items-center gap-2"
-            aria-label="Projeto COMpaixão - Página inicial"
-          >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-600 transition-colors group-hover:bg-primary-700">
-              <Heart
-                className="h-5 w-5 text-white"
-                fill="currentColor"
-              />
-            </div>
-
-            <div className="flex min-w-0 flex-col">
-              <span className="truncate text-lg font-bold leading-tight text-earth-900">
-                COMpaixão
-              </span>
-
-              <span className="truncate text-[10px] uppercase leading-tight tracking-wider text-earth-500">
-                IFRS - Bento Gonçalves
-              </span>
-            </div>
-          </Link>
-
-          <nav
-            className="hidden items-center gap-1 lg:flex"
-            aria-label="Navegação principal"
-          >
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.to
-
-              return (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'bg-primary-50 text-primary-700'
-                      : 'text-earth-600 hover:bg-earth-100 hover:text-primary-700'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              )
-            })}
-          </nav>
-
-          <div className="hidden lg:block">
-            <Link
-              to="/como-participar"
-              className="inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-700 hover:shadow"
-            >
-              Quero participar
-            </Link>
+    <header className="sticky top-0 z-50 border-b border-earth-100 bg-white/95 backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link
+          to="/"
+          onClick={closeMobileMenu}
+          className="flex items-center gap-2"
+          aria-label="Projeto COMpaixão - Página inicial"
+        >
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 text-sm font-bold text-white">
+            C
           </div>
 
-          <button
-            type="button"
-            onClick={() => setMobileOpen((current) => !current)}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-earth-600 transition-colors hover:bg-earth-100 hover:text-earth-900 lg:hidden"
-            aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-navigation"
+          <span className="text-lg font-bold text-earth-900">
+            COMpaixão
+          </span>
+        </Link>
+
+        <nav
+          className="hidden items-center gap-1 lg:flex"
+          aria-label="Navegação principal"
+        >
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.to === '/'}
+              className={({ isActive }) =>
+                [
+                  'rounded-lg px-3 py-2 text-sm font-medium transition',
+                  isActive
+                    ? 'bg-primary-50 text-primary-700'
+                    : 'text-earth-600 hover:bg-earth-50 hover:text-earth-900',
+                ].join(' ')
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="hidden items-center gap-3 lg:flex">
+          <Link
+            to="/contato"
+            className="rounded-lg px-3 py-2 text-sm font-medium text-earth-600 transition hover:bg-earth-50 hover:text-earth-900"
           >
-            {mobileOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
+            Contato
+          </Link>
+
+          <Link
+            to="/como-participar"
+            className="rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700"
+          >
+            Como participar
+          </Link>
         </div>
+
+        <button
+          type="button"
+          onClick={toggleMobileMenu}
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-earth-700 transition hover:bg-earth-100 lg:hidden"
+          aria-label={
+            mobileOpen
+              ? 'Fechar menu de navegação'
+              : 'Abrir menu de navegação'
+          }
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-menu"
+        >
+          {mobileOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
+        </button>
       </div>
 
-      {mobileOpen && (
-        <div id="mobile-navigation">
-          <MobileMenu
-            links={navLinks}
-            onClose={() => setMobileOpen(false)}
-          />
-        </div>
-      )}
+      <MobileMenu
+        isOpen={mobileOpen}
+        onClose={closeMobileMenu}
+      />
     </header>
   )
 }
