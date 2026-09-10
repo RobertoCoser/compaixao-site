@@ -86,14 +86,14 @@ export default function ComoParticipar() {
             </p>
           </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-3 md:gap-6">
             {participationOptions.map((option) => {
               const Icon = option.icon
 
               return (
                 <article
                   key={option.title}
-                  className="flex flex-col rounded-2xl border border-earth-100 bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md"
+                  className="flex h-full flex-col rounded-2xl border border-earth-100 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md sm:p-7"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
                     <Icon className="h-6 w-6" />
@@ -188,7 +188,7 @@ export default function ComoParticipar() {
 
           <Link
             to="/contato"
-            className="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-primary-700 shadow-sm transition hover:bg-earth-50"
+            className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-primary-700 shadow-sm transition hover:bg-earth-50 sm:w-auto"
           >
             Entre em contato
             <ArrowRight className="h-4 w-4" />

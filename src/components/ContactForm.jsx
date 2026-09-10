@@ -28,6 +28,10 @@ export default function ContactForm() {
         [name]: '',
       }))
     }
+
+    if (submitted) {
+      setSubmitted(false)
+    }
   }
 
   const validate = () => {
@@ -50,7 +54,8 @@ export default function ContactForm() {
     if (!form.message.trim()) {
       newErrors.message = 'Escreva uma mensagem.'
     } else if (form.message.trim().length < 10) {
-      newErrors.message = 'A mensagem deve ter pelo menos 10 caracteres.'
+      newErrors.message =
+        'A mensagem deve ter pelo menos 10 caracteres.'
     }
 
     return newErrors
@@ -73,7 +78,7 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="rounded-2xl border border-earth-100 bg-white p-6 shadow-sm sm:p-8">
+    <div className="min-w-0 rounded-2xl border border-earth-100 bg-white p-5 shadow-sm sm:p-8">
       <h2 className="text-2xl font-bold text-earth-900">
         Envie uma mensagem
       </h2>
@@ -90,7 +95,10 @@ export default function ContactForm() {
           <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" />
 
           <div>
-            <p className="font-semibold">Mensagem enviada!</p>
+            <p className="font-semibold">
+              Mensagem enviada!
+            </p>
+
             <p className="mt-1 text-sm">
               Esta é uma demonstração. O envio real será disponibilizado
               posteriormente.
@@ -99,7 +107,11 @@ export default function ContactForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="mt-7 space-y-5" noValidate>
+      <form
+        onSubmit={handleSubmit}
+        className="mt-7 space-y-5"
+        noValidate
+      >
         <div>
           <label
             htmlFor="name"
@@ -116,6 +128,10 @@ export default function ContactForm() {
             onChange={handleChange}
             placeholder="Seu nome"
             autoComplete="name"
+            aria-invalid={Boolean(errors.name)}
+            aria-describedby={
+              errors.name ? 'name-error' : undefined
+            }
             className={`w-full rounded-xl border bg-white px-4 py-3 text-earth-900 outline-none transition placeholder:text-earth-400 focus:ring-2 focus:ring-primary-200 ${
               errors.name
                 ? 'border-red-400'
@@ -124,7 +140,12 @@ export default function ContactForm() {
           />
 
           {errors.name && (
-            <p className="mt-1.5 text-sm text-red-600">{errors.name}</p>
+            <p
+              id="name-error"
+              className="mt-1.5 text-sm text-red-600"
+            >
+              {errors.name}
+            </p>
           )}
         </div>
 
@@ -145,6 +166,10 @@ export default function ContactForm() {
               onChange={handleChange}
               placeholder="seu@email.com"
               autoComplete="email"
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={
+                errors.email ? 'email-error' : undefined
+              }
               className={`w-full rounded-xl border bg-white px-4 py-3 text-earth-900 outline-none transition placeholder:text-earth-400 focus:ring-2 focus:ring-primary-200 ${
                 errors.email
                   ? 'border-red-400'
@@ -153,7 +178,12 @@ export default function ContactForm() {
             />
 
             {errors.email && (
-              <p className="mt-1.5 text-sm text-red-600">{errors.email}</p>
+              <p
+                id="email-error"
+                className="mt-1.5 text-sm text-red-600"
+              >
+                {errors.email}
+              </p>
             )}
           </div>
 
@@ -191,22 +221,43 @@ export default function ContactForm() {
             name="type"
             value={form.type}
             onChange={handleChange}
+            aria-invalid={Boolean(errors.type)}
+            aria-describedby={
+              errors.type ? 'type-error' : undefined
+            }
             className={`w-full rounded-xl border bg-white px-4 py-3 text-earth-900 outline-none transition focus:ring-2 focus:ring-primary-200 ${
               errors.type
                 ? 'border-red-400'
                 : 'border-earth-200 focus:border-primary-500'
             }`}
           >
-            <option value="">Selecione uma opção</option>
-            <option value="voluntariado">Quero ser voluntário</option>
-            <option value="contribuicao">Quero contribuir</option>
-            <option value="parceria">Parcerias e apoio</option>
-            <option value="duvida">Dúvidas</option>
-            <option value="outro">Outro assunto</option>
+            <option value="">
+              Selecione uma opção
+            </option>
+            <option value="voluntariado">
+              Quero ser voluntário
+            </option>
+            <option value="contribuicao">
+              Quero contribuir
+            </option>
+            <option value="parceria">
+              Parcerias e apoio
+            </option>
+            <option value="duvida">
+              Dúvidas
+            </option>
+            <option value="outro">
+              Outro assunto
+            </option>
           </select>
 
           {errors.type && (
-            <p className="mt-1.5 text-sm text-red-600">{errors.type}</p>
+            <p
+              id="type-error"
+              className="mt-1.5 text-sm text-red-600"
+            >
+              {errors.type}
+            </p>
           )}
         </div>
 
@@ -225,6 +276,10 @@ export default function ContactForm() {
             value={form.message}
             onChange={handleChange}
             placeholder="Escreva sua mensagem..."
+            aria-invalid={Boolean(errors.message)}
+            aria-describedby={
+              errors.message ? 'message-error' : undefined
+            }
             className={`w-full resize-none rounded-xl border bg-white px-4 py-3 text-earth-900 outline-none transition placeholder:text-earth-400 focus:ring-2 focus:ring-primary-200 ${
               errors.message
                 ? 'border-red-400'
@@ -233,7 +288,12 @@ export default function ContactForm() {
           />
 
           {errors.message && (
-            <p className="mt-1.5 text-sm text-red-600">{errors.message}</p>
+            <p
+              id="message-error"
+              className="mt-1.5 text-sm text-red-600"
+            >
+              {errors.message}
+            </p>
           )}
         </div>
 

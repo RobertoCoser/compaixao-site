@@ -1,4 +1,9 @@
-import { HeartHandshake, Mail, MessageCircle, Users } from 'lucide-react'
+import {
+  HeartHandshake,
+  Mail,
+  MessageCircle,
+  Users,
+} from 'lucide-react'
 import ContactForm from '../components/ContactForm'
 
 const contactReasons = [
@@ -42,7 +47,7 @@ export default function Contato() {
             </p>
           </div>
 
-          <div className="mt-12 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="mt-10 grid gap-8 sm:mt-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10">
             <div>
               <h2 className="text-2xl font-bold text-earth-900">
                 Como podemos ajudar?
@@ -60,13 +65,13 @@ export default function Contato() {
                   return (
                     <div
                       key={reason.title}
-                      className="flex gap-4 rounded-2xl border border-earth-100 bg-white p-5 shadow-sm"
+                      className="flex items-start gap-3 rounded-2xl border border-earth-100 bg-white p-4 shadow-sm sm:gap-4 sm:p-5"
                     >
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
                         <Icon className="h-5 w-5" />
                       </div>
 
-                      <div>
+                      <div className="min-w-0">
                         <h3 className="font-bold text-earth-900">
                           {reason.title}
                         </h3>

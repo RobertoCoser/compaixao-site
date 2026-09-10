@@ -2,15 +2,17 @@ import { Link, useParams } from 'react-router-dom'
 import {
   ArrowLeft,
   Calendar,
-  User,
   Newspaper,
+  User,
 } from 'lucide-react'
 import { noticias } from '../data/noticias'
 
 export default function NoticiaDetalhe() {
   const { slug } = useParams()
 
-  const noticia = noticias.find((item) => item.slug === slug)
+  const noticia = noticias.find(
+    (item) => item.slug === slug,
+  )
 
   if (!noticia) {
     return (
@@ -66,17 +68,18 @@ export default function NoticiaDetalhe() {
               {noticia.category}
             </span>
 
-            <h1 className="mt-5 text-3xl font-bold leading-tight tracking-tight text-earth-900 sm:text-4xl lg:text-5xl">
+            <h1 className="mt-5 break-words text-3xl font-bold leading-tight tracking-tight text-earth-900 sm:text-4xl lg:text-5xl">
               {noticia.title}
             </h1>
 
-            <p className="mt-5 text-lg leading-8 text-earth-600 sm:text-xl">
+            <p className="mt-5 text-base leading-7 text-earth-600 sm:text-xl sm:leading-8">
               {noticia.excerpt}
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-earth-500">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
+
                 <time dateTime={noticia.publishedAt}>
                   {formattedDate}
                 </time>
@@ -96,12 +99,12 @@ export default function NoticiaDetalhe() {
           <img
             src={noticia.coverImage}
             alt={noticia.title}
-            className="aspect-[16/9] w-full object-cover"
+            className="aspect-[4/3] w-full object-cover sm:aspect-[16/9]"
           />
         </div>
 
         <div className="mx-auto mt-10 max-w-3xl">
-          <div className="space-y-6 text-base leading-8 text-earth-700 sm:text-lg">
+          <div className="break-words space-y-5 text-base leading-7 text-earth-700 sm:space-y-6 sm:text-lg sm:leading-8">
             {noticia.content
               .split('\n')
               .filter((paragraph) => paragraph.trim())
@@ -119,12 +122,15 @@ export default function NoticiaDetalhe() {
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 {noticia.images.map((image, index) => {
                   const src =
-                    typeof image === 'string' ? image : image.src
+                    typeof image === 'string'
+                      ? image
+                      : image.src
 
                   const alt =
                     typeof image === 'string'
                       ? `${noticia.title} - imagem ${index + 1}`
-                      : image.alt || `${noticia.title} - imagem ${index + 1}`
+                      : image.alt ||
+                        `${noticia.title} - imagem ${index + 1}`
 
                   return (
                     <img
