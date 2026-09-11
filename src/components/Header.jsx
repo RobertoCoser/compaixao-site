@@ -1,97 +1,123 @@
 import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Heart } from 'lucide-react'
+import { Link, NavLink } from 'react-router-dom'
+import { Menu, X } from 'lucide-react'
+import MobileMenu from './MobileMenu'
 
 const navLinks = [
-  { to: '/', label: 'Início' },
-  { to: '/sobre', label: 'Sobre' },
-  { to: '/acoes', label: 'Ações' },
-  { to: '/noticias', label: 'Notícias' },
-  { to: '/galeria', label: 'Galeria' },
-  { to: '/como-participar', label: 'Como Participar' },
-  { to: '/contato', label: 'Contato' },
+  {
+    label: 'Início',
+    to: '/',
+  },
+  {
+    label: 'Sobre',
+    to: '/sobre',
+  },
+  {
+    label: 'Ações',
+    to: '/acoes',
+  },
+  {
+    label: 'Notícias',
+    to: '/noticias',
+  },
+  {
+    label: 'Galeria',
+    to: '/galeria',
+  },
 ]
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const location = useLocation()
+
+  const toggleMobileMenu = () => {
+    setMobileOpen((current) => !current)
+  }
+
+  const closeMobileMenu = () => {
+    setMobileOpen(false)
+  }
 
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-earth-200 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-xl bg-primary-600 flex items-center justify-center group-hover:bg-primary-700 transition-colors">
-              <Heart className="w-5 h-5 text-white" fill="currentColor" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-lg font-bold text-earth-900 leading-tight">COMpaixão</span>
-              <span className="text-[10px] text-earth-500 leading-tight uppercase tracking-wider">IFRS - Bento Gonçalves</span>
-            </div>
-          </Link>
-
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  location.pathname === link.to
-                    ? 'text-primary-700 bg-primary-50'
-                    : 'text-earth-600 hover:text-primary-700 hover:bg-earth-100'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="hidden lg:block">
-            <Link
-              to="/como-participar"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-colors shadow-sm hover:shadow"
-            >
-              Quero participar
-            </Link>
+    <header className="sticky top-0 z-50 border-b border-earth-100 bg-white/95 backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link
+          to="/"
+          onClick={closeMobileMenu}
+          className="flex items-center gap-2"
+          aria-label="Projeto COMpaixão - Página inicial"
+        >
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 text-sm font-bold text-white">
+            C
           </div>
 
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 rounded-lg text-earth-600 hover:bg-earth-100"
-            aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
+          <span className="text-lg font-bold text-earth-900">
+            COMpaixão
+          </span>
+        </Link>
+
+        <nav
+          className="hidden items-center gap-1 lg:flex"
+          aria-label="Navegação principal"
+        >
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.to === '/'}
+              className={({ isActive }) =>
+                [
+                  'rounded-lg px-3 py-2 text-sm font-medium transition',
+                  isActive
+                    ? 'bg-primary-50 text-primary-700'
+                    : 'text-earth-600 hover:bg-earth-50 hover:text-earth-900',
+                ].join(' ')
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="hidden items-center gap-3 lg:flex">
+          <Link
+            to="/contato"
+            className="rounded-lg px-3 py-2 text-sm font-medium text-earth-600 transition hover:bg-earth-50 hover:text-earth-900"
           >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+            Contato
+          </Link>
+
+          <Link
+            to="/como-participar"
+            className="rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700"
+          >
+            Como participar
+          </Link>
         </div>
+
+        <button
+          type="button"
+          onClick={toggleMobileMenu}
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-earth-700 transition hover:bg-earth-100 lg:hidden"
+          aria-label={
+            mobileOpen
+              ? 'Fechar menu de navegação'
+              : 'Abrir menu de navegação'
+          }
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-menu"
+        >
+          {mobileOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
+        </button>
       </div>
 
-      {mobileOpen && (
-        <div className="lg:hidden border-t border-earth-200 bg-white">
-          <nav className="px-4 py-3 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                onClick={() => setMobileOpen(false)}
-                className={`block px-3 py-2.5 rounded-lg text-sm font-medium ${
-                  location.pathname === link.to
-                    ? 'text-primary-700 bg-primary-50'
-                    : 'text-earth-600 hover:bg-earth-50'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <Link
-              to="/como-participar"
-              onClick={() => setMobileOpen(false)}
-              className="block mt-2 px-3 py-2.5 rounded-xl bg-primary-600 text-white text-sm font-semibold text-center"
-            >
-              Quero participar
-            </Link>
-          </nav>
-        </div>
-      )}
+      <MobileMenu
+        isOpen={mobileOpen}
+        onClose={closeMobileMenu}
+      />
     </header>
   )
 }
