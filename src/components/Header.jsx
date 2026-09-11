@@ -116,6 +116,7 @@ export default function Header() {
 
       <MobileMenu
         isOpen={mobileOpen}
+        links={navLinks}
         onClose={closeMobileMenu}
       />
     </header>

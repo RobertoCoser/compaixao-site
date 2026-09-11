@@ -38,8 +38,8 @@ export const noticias = [
   {
     id: 4,
     title: "Ações com idosos: Confraternização no Lar do Ancião",
-    slug: "acoes-com-idosos-2024",
-    excerpt: "Visitas, confraternizações, entrega de presentes e atividades de integração com os idosos atendidos.",
+    slug: "acoes-com-idosos-lar-do-anciao-2024",
+    excerpt: "Ação promove confraternização, cuidado e momentos de integração com idosos do Lar do Ancião.",
     content: "O COMpaixão realizou uma nova ação no Lar do Ancião, levando confraternização, presentes e muito carinho aos idosos. Os voluntários prepararam mensagens personalizadas, produtos de higiene e atividades de integração que proporcionaram momentos de alegria e afeto. Ações como esta reforçam a importância da presença e do cuidado com a terceira idade.",
     coverImage: "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&w=800&q=80",
     category: "Idosos",
