@@ -24,6 +24,10 @@ const navLinks = [
     label: 'Galeria',
     to: '/galeria',
   },
+  {
+  label: 'Eventos',
+  to: '/eventos',
+},
 ]
 
 export default function Header() {

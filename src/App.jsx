@@ -13,6 +13,7 @@ import Acoes from './pages/Acoes'
 import Noticias from './pages/Noticias'
 import NoticiaDetalhe from './pages/NoticiaDetalhe'
 import Galeria from './pages/Galeria'
+import Eventos from './pages/Eventos'
 import ComoParticipar from './pages/ComoParticipar'
 import Contato from './pages/Contato'
 
@@ -53,6 +54,12 @@ const seoPages = {
     title: 'Galeria',
     description:
       'Veja registros de ações, campanhas e momentos que fazem parte do Projeto COMpaixão.',
+  },
+
+  '/eventos': {
+    title: 'Eventos',
+    description:
+      'Acompanhe os próximos eventos e atividades realizadas pelo Projeto COMpaixão.',
   },
 
   '/como-participar': {
@@ -188,6 +195,11 @@ function App() {
           <Route
             path="/galeria"
             element={<Galeria />}
+          />
+
+          <Route
+            path="/eventos"
+            element={<Eventos />}
           />
 
           <Route

@@ -7,6 +7,7 @@ const footerLinks = [
   { to: '/acoes', label: 'Ações' },
   { to: '/noticias', label: 'Notícias' },
   { to: '/galeria', label: 'Galeria' },
+  { to: '/eventos', label: 'Eventos' },
   { to: '/como-participar', label: 'Como Participar' },
   { to: '/contato', label: 'Contato' },
 ]

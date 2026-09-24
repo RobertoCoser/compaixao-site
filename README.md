@@ -38,7 +38,7 @@ git --version
 Clone o repositório:
 
 ```bash
-git clone <URL-DO-REPOSITORIO>
+git clone https://github.com/RobertoCoser/compaixao-site.git
 ```
 
 Entre na pasta:

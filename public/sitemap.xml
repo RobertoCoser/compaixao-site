@@ -44,4 +44,8 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+
+  <url>
+    <loc>https://projetocompaixao.vercel.app/eventos</loc>
+  </url>
 </urlset>

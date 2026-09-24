@@ -3,7 +3,10 @@ import {
   Accessibility,
   ArrowRight,
   Baby,
+  CalendarDays,
+  Clock,
   Heart,
+  MapPin,
   Recycle,
   Sprout,
   Users,
@@ -15,6 +18,7 @@ import NewsCard from '../components/NewsCard'
 import { impacto } from '../data/impacto'
 import { acoes } from '../data/acoes'
 import { noticias } from '../data/noticias'
+import { eventos } from '../data/eventos'
 
 const iconMap = {
   Heart,
@@ -27,6 +31,10 @@ const iconMap = {
 
 export default function Home() {
   const latestNews = noticias.slice(0, 3)
+
+  const upcomingEvents = eventos
+    .filter((event) => event.status === 'upcoming')
+    .slice(0, 3)
 
   return (
     <>
@@ -310,8 +318,83 @@ export default function Home() {
         </div>
       </section>
 
-      {/* NOTÍCIAS */}
+      {/* EVENTOS */}
       <section className="bg-earth-50 py-16 sm:py-20 lg:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between lg:mb-14">
+            <div>
+              <span className="text-sm font-semibold uppercase tracking-wider text-primary-600">
+                Participe
+              </span>
+
+              <h2 className="mt-2 text-3xl font-bold text-earth-900 sm:text-4xl">
+                Próximos Eventos
+              </h2>
+
+              <p className="mt-3 max-w-2xl leading-7 text-earth-600">
+                Confira as próximas atividades e oportunidades de
+                participar das iniciativas do Projeto COMpaixão.
+              </p>
+            </div>
+
+            <Link
+              to="/eventos"
+              className="inline-flex items-center gap-2 font-semibold text-primary-700 transition-colors hover:text-primary-800"
+            >
+              Ver todos
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+            {upcomingEvents.map((event, index) => (
+              <ScrollReveal
+                key={event.id}
+                delay={index * 100}
+                className="h-full"
+              >
+                <article className="flex h-full flex-col rounded-2xl border border-earth-100 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-xl sm:p-6">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
+                    <CalendarDays className="h-5 w-5" />
+                  </div>
+
+                  <h3 className="mt-5 text-xl font-bold text-earth-900">
+                    {event.title}
+                  </h3>
+
+                  <p className="mt-2 flex-1 text-sm leading-6 text-earth-600">
+                    {event.description}
+                  </p>
+
+                  <div className="mt-5 space-y-2 border-t border-earth-100 pt-4 text-sm text-earth-600">
+                    <div className="flex items-center gap-2">
+                      <CalendarDays className="h-4 w-4 text-primary-600" />
+                      <span>
+                        {new Date(
+                          `${event.date}T12:00:00`,
+                        ).toLocaleDateString('pt-BR')}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-primary-600" />
+                      <span>{event.time}</span>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary-600" />
+                      <span>{event.location}</span>
+                    </div>
+                  </div>
+                </article>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* NOTÍCIAS */}
+      <section className="bg-white py-16 sm:py-20 lg:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between lg:mb-14">
             <div>
