@@ -1,3 +1,5 @@
+
+import { useEffect, useState } from 'react'
 import {
   Route,
   Routes,
@@ -23,7 +25,7 @@ import AdminLayout from './pages/admin/AdminLayout'
 import AdminNoticias from './pages/admin/AdminNoticias'
 import GaleriaAdmin from './pages/admin/GaleriaAdmin'
 
-import { noticias } from './data/noticias'
+import { buscarNoticiaPorSlug } from './services/noticiasService'
 
 const seoPages = {
   '/': {
@@ -75,6 +77,73 @@ const seoPages = {
   },
 }
 
+function ArticleSEO({ slug, path }) {
+  const [estado, setEstado] = useState({
+    status: 'loading',
+    noticia: null,
+  })
+
+  useEffect(() => {
+    let ativo = true
+
+    async function carregarSEO() {
+      try {
+        const noticia = await buscarNoticiaPorSlug(slug)
+
+        if (ativo) {
+          setEstado({ status: 'success', noticia })
+        }
+      } catch (error) {
+        if (ativo) {
+          const status = error.message === 'Notícia não encontrada'
+            ? 'not-found'
+            : 'error'
+
+          setEstado({ status, noticia: null })
+        }
+      }
+    }
+
+    carregarSEO()
+
+    return () => {
+      ativo = false
+    }
+  }, [slug])
+
+  if (estado.status === 'success') {
+    return (
+      <SEO
+        title={estado.noticia.title}
+        description={estado.noticia.excerpt}
+        path={path}
+        image={estado.noticia.coverImage}
+        type="article"
+      />
+    )
+  }
+
+  if (estado.status === 'not-found') {
+    return (
+      <SEO
+        title="Notícia não encontrada"
+        description="A notícia solicitada não foi encontrada."
+        path={path}
+        noIndex
+      />
+    )
+  }
+
+  return (
+    <SEO
+      title="Notícias"
+      description="Acompanhe notícias, campanhas, atividades e novidades do Projeto COMpaixão."
+      path={path}
+      noIndex
+    />
+  )
+}
+
 function RouteSEO() {
   const location = useLocation()
 
@@ -90,39 +159,18 @@ function RouteSEO() {
   }
 
   if (location.pathname.startsWith('/noticias/')) {
-    const slug = location.pathname.replace(
-      '/noticias/',
-      '',
-    )
-
-    const noticia = noticias.find(
-      (item) => item.slug === slug,
-    )
-
-    if (noticia) {
-      return (
-        <SEO
-          title={noticia.title}
-          description={noticia.excerpt}
-          path={`/noticias/${noticia.slug}`}
-          image={noticia.coverImage}
-          type="article"
-        />
-      )
-    }
+    const slug = location.pathname.slice('/noticias/'.length)
 
     return (
-      <SEO
-        title="Notícia não encontrada"
-        description="A notícia solicitada não foi encontrada."
+      <ArticleSEO
+        key={slug}
+        slug={slug}
         path={location.pathname}
-        noIndex
       />
     )
   }
 
-  const pageSEO =
-    seoPages[location.pathname]
+  const pageSEO = seoPages[location.pathname]
 
   if (!pageSEO) {
     return (

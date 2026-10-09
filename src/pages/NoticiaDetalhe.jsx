@@ -1,3 +1,5 @@
+
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
   ArrowLeft,
@@ -5,16 +7,95 @@ import {
   Newspaper,
   User,
 } from 'lucide-react'
-import { noticias } from '../data/noticias'
+import { buscarNoticiaPorSlug } from '../services/noticiasService'
 
-export default function NoticiaDetalhe() {
-  const { slug } = useParams()
+function ConteudoNoticia({ slug }) {
+  const [noticia, setNoticia] = useState(null)
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState('')
+  const [naoEncontrada, setNaoEncontrada] = useState(false)
 
-  const noticia = noticias.find(
-    (item) => item.slug === slug,
-  )
+  useEffect(() => {
+    let ativo = true
 
-  if (!noticia) {
+    async function carregarNoticia() {
+      try {
+        const dados = await buscarNoticiaPorSlug(slug)
+
+        if (ativo) {
+          setNoticia(dados)
+        }
+      } catch (error) {
+        if (ativo) {
+          if (error.message === 'Notícia não encontrada') {
+            setNaoEncontrada(true)
+          } else {
+            setErro(error.message)
+          }
+        }
+      } finally {
+        if (ativo) {
+          setCarregando(false)
+        }
+      }
+    }
+
+    carregarNoticia()
+
+    return () => {
+      ativo = false
+    }
+  }, [slug])
+
+  if (carregando) {
+    return (
+      <section className="flex min-h-[60vh] items-center justify-center bg-earth-50 px-4 py-16">
+        <div
+          role="status"
+          className="text-center text-earth-600"
+        >
+          <Newspaper className="mx-auto mb-4 h-9 w-9 text-primary-600" />
+
+          <p className="font-medium">
+            Carregando notícia...
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  if (erro) {
+    return (
+      <section className="flex min-h-[60vh] items-center bg-earth-50 py-16">
+        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50 text-red-600">
+            <Newspaper className="h-8 w-8" />
+          </div>
+
+          <h1 className="mt-6 text-3xl font-bold text-earth-900">
+            Não foi possível carregar a notícia
+          </h1>
+
+          <p
+            role="alert"
+            className="mx-auto mt-4 max-w-xl leading-7 text-earth-600"
+          >
+            {erro}
+          </p>
+
+          <Link
+            to="/noticias"
+            className="mt-7 inline-flex items-center gap-2 rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Voltar para notícias
+          </Link>
+        </div>
+      </section>
+    )
+  }
+
+  if (naoEncontrada || !noticia) {
     return (
       <section className="flex min-h-[60vh] items-center bg-earth-50 py-16">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
@@ -159,4 +240,10 @@ export default function NoticiaDetalhe() {
       </div>
     </article>
   )
+}
+
+export default function NoticiaDetalhe() {
+  const { slug } = useParams()
+
+  return <ConteudoNoticia key={slug} slug={slug} />
 }

@@ -1,18 +1,50 @@
-import { useMemo, useState } from 'react'
+
+import { useEffect, useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 import NewsCard from '../components/NewsCard'
 import SectionTitle from '../components/SectionTitle'
 import ScrollReveal from '../components/ScrollReveal'
-import { noticias } from '../data/noticias'
-
-const categorias = [
-  'Todas',
-  ...new Set(noticias.map((news) => news.category)),
-]
+import { listarNoticias } from '../services/noticiasService'
 
 export default function Noticias() {
   const [busca, setBusca] = useState('')
   const [categoria, setCategoria] = useState('Todas')
+  const [noticias, setNoticias] = useState([])
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState('')
+
+  useEffect(() => {
+    let ativo = true
+
+    async function carregarNoticias() {
+      try {
+        const dados = await listarNoticias()
+
+        if (ativo) {
+          setNoticias(dados)
+        }
+      } catch (error) {
+        if (ativo) {
+          setErro(error.message)
+        }
+      } finally {
+        if (ativo) {
+          setCarregando(false)
+        }
+      }
+    }
+
+    carregarNoticias()
+
+    return () => {
+      ativo = false
+    }
+  }, [])
+
+  const categorias = useMemo(
+    () => ['Todas', ...new Set(noticias.map((news) => news.category))],
+    [noticias],
+  )
 
   const filtradas = useMemo(() => {
     const termo = busca.trim().toLowerCase()
@@ -34,7 +66,7 @@ export default function Noticias() {
           new Date(`${b.publishedAt}T12:00:00`) -
           new Date(`${a.publishedAt}T12:00:00`),
       )
-  }, [busca, categoria])
+  }, [busca, categoria, noticias])
 
   const destaque = filtradas[0]
   const restantes = filtradas.slice(1)
@@ -81,43 +113,67 @@ export default function Noticias() {
           </div>
         </div>
 
-        {destaque && (
-          <ScrollReveal>
-            <div className="mb-8 sm:mb-10">
-              <NewsCard
-                news={destaque}
-                featured
-              />
-            </div>
-          </ScrollReveal>
+        {carregando && (
+          <div
+            role="status"
+            className="py-12 text-center text-earth-600"
+          >
+            Carregando notícias...
+          </div>
         )}
 
-        {restantes.length > 0 && (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-            {restantes.map((news, index) => (
-              <ScrollReveal
-                key={news.id}
-                delay={index * 100}
-                className="h-full"
-              >
-                <NewsCard news={news} />
+        {erro && (
+          <div
+            role="alert"
+            className="rounded-xl border border-red-200 bg-red-50 p-5 text-center text-red-700"
+          >
+            Não foi possível carregar as notícias: {erro}
+          </div>
+        )}
+
+        {!carregando && !erro && (
+          <>
+            {destaque && (
+              <ScrollReveal>
+                <div className="mb-8 sm:mb-10">
+                  <NewsCard
+                    news={destaque}
+                    featured
+                  />
+                </div>
               </ScrollReveal>
-            ))}
-          </div>
-        )}
+            )}
 
-        {filtradas.length === 0 && (
-          <div className="rounded-2xl border border-earth-100 bg-white px-5 py-12 text-center shadow-sm sm:py-16">
-            <Search className="mx-auto h-9 w-9 text-earth-300" />
+            {restantes.length > 0 && (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+                {restantes.map((news, index) => (
+                  <ScrollReveal
+                    key={news._id}
+                    delay={index * 100}
+                    className="h-full"
+                  >
+                    <NewsCard news={news} />
+                  </ScrollReveal>
+                ))}
+              </div>
+            )}
 
-            <p className="mt-4 font-medium text-earth-700">
-              Nenhuma notícia encontrada.
-            </p>
+            {filtradas.length === 0 && (
+              <div className="rounded-2xl border border-earth-100 bg-white px-5 py-12 text-center shadow-sm sm:py-16">
+                <Search className="mx-auto h-9 w-9 text-earth-300" />
 
-            <p className="mt-1 text-sm text-earth-500">
-              Tente alterar o termo da busca ou selecionar outra categoria.
-            </p>
-          </div>
+                <p className="mt-4 font-medium text-earth-700">
+                  Nenhuma notícia encontrada.
+                </p>
+
+                <p className="mt-1 text-sm text-earth-500">
+                  {busca || categoria !== 'Todas'
+                    ? 'Tente alterar o termo da busca ou selecionar outra categoria.'
+                    : 'Ainda não há notícias publicadas. Volte em breve para acompanhar as novidades.'}
+                </p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

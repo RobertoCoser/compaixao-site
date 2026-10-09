@@ -1,3 +1,5 @@
+
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Accessibility,
@@ -17,7 +19,7 @@ import ScrollReveal from '../components/ScrollReveal'
 import NewsCard from '../components/NewsCard'
 import { impacto } from '../data/impacto'
 import { acoes } from '../data/acoes'
-import { noticias } from '../data/noticias'
+import { listarNoticias } from '../services/noticiasService'
 import { eventos } from '../data/eventos'
 
 const iconMap = {
@@ -30,7 +32,37 @@ const iconMap = {
 }
 
 export default function Home() {
-  const latestNews = noticias.slice(0, 3)
+  const [latestNews, setLatestNews] = useState([])
+  const [carregandoNoticias, setCarregandoNoticias] = useState(true)
+  const [erroNoticias, setErroNoticias] = useState('')
+
+  useEffect(() => {
+    let ativo = true
+
+    async function carregarNoticias() {
+      try {
+        const dados = await listarNoticias()
+
+        if (ativo) {
+          setLatestNews(dados.slice(0, 3))
+        }
+      } catch (error) {
+        if (ativo) {
+          setErroNoticias(error.message)
+        }
+      } finally {
+        if (ativo) {
+          setCarregandoNoticias(false)
+        }
+      }
+    }
+
+    carregarNoticias()
+
+    return () => {
+      ativo = false
+    }
+  }, [])
 
   const upcomingEvents = eventos
     .filter((event) => event.status === 'upcoming')
@@ -87,7 +119,7 @@ export default function Home() {
 
               <Link
                 to="/como-participar"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-6 py-3.5 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20 sm:w-auto sm:px-8"
+                className="inline-flex w-full items-center justify-center rounded-xl border border-white/20 bg-white/10 px-6 py-3.5 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20 sm:w-auto sm:px-8"
               >
                 Quero participar
               </Link>
@@ -151,7 +183,7 @@ export default function Home() {
 
       {/* IMPACTO */}
       <section className="bg-primary-900 py-16 sm:py-20 lg:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 sm:py-20 lg:px-8">
           <SectionTitle
             title="Nosso Impacto"
             subtitle="Resultados"
@@ -416,17 +448,31 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-            {latestNews.map((news, index) => (
-              <ScrollReveal
-                key={news.id}
-                delay={index * 100}
-                className="h-full"
-              >
-                <NewsCard news={news} />
-              </ScrollReveal>
-            ))}
-          </div>
+          {carregandoNoticias ? (
+            <p role="status" className="py-8 text-center text-earth-600">
+              Carregando notícias...
+            </p>
+          ) : erroNoticias ? (
+            <p role="alert" className="py-8 text-center text-earth-600">
+              Não foi possível carregar as últimas notícias no momento.
+            </p>
+          ) : latestNews.length === 0 ? (
+            <p className="py-8 text-center text-earth-600">
+              Ainda não há notícias publicadas.
+            </p>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+              {latestNews.map((news, index) => (
+                <ScrollReveal
+                  key={news._id}
+                  delay={index * 100}
+                  className="h-full"
+                >
+                  <NewsCard news={news} />
+                </ScrollReveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -468,7 +514,7 @@ export default function Home() {
               Faça parte dessa história.
             </h2>
 
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-primary-100 sm:text-lg">
+            <p className="mt-5 max-w-2xl text-base leading-7 text-primary-100 sm:text-lg">
               Seja como voluntário, doador ou parceiro. Sua participação
               transforma solidariedade em ações concretas que beneficiam a
               nossa comunidade.
