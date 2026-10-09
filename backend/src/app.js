@@ -4,6 +4,7 @@ import healthRoutes from './routes/healthRoutes.js'
 import authRoutes from './routes/authRoutes.js'
 import { notFound } from './middlewares/notFound.js'
 import { errorHandler } from './middlewares/errorHandler.js'
+import noticiaRoutes from './routes/noticiaRoutes.js'
 
 const app = express()
 
@@ -14,6 +15,7 @@ app.use(express.json({ limit: '100kb' }))
 
 app.use('/api/v1/health', healthRoutes)
 app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/noticias', noticiaRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
